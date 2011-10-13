@@ -1,0 +1,37 @@
+diff --git a/includes/uuid_term.features.inc b/includes/uuid_term.features.inc
+index a1b4d5b..910a115 100644
+--- a/includes/uuid_term.features.inc
++++ b/includes/uuid_term.features.inc
+@@ -136,10 +136,7 @@ function uuid_term_features_rebuild($module) {
+           }
+         }
+ 
+-        $ret = taxonomy_term_save($term /* TODO Term object replaces array $data */);
+-
+-        // TODO: remove when http://drupal.org/node/860442 is resolved.
+-        uuid_set_uuid('taxonomy_term_data', 'tid', $data['tid'], $data['uuid']);
++        $ret = taxonomy_term_save((object) $term); /* TODO Term object replaces array $data */
+       }
+ 
+     }
+diff --git a/includes/uuid_vocabulary.features.inc b/includes/uuid_vocabulary.features.inc
+index b95f20d..d6667b7 100644
+--- a/includes/uuid_vocabulary.features.inc
++++ b/includes/uuid_vocabulary.features.inc
+@@ -99,13 +99,13 @@ function uuid_vocabulary_features_rebuild($module) {
+   $vocabs = module_invoke($module, 'uuid_features_default_vocabularies');
+   if (!empty($vocabs)) {
+     foreach ($vocabs as $vocab) {
+-      $vocabulary = taxonomy_vocabulary_machine_name_load($vocab->machine_name);
++      $vocabulary = taxonomy_vocabulary_machine_name_load($vocab['machine_name']);
+ 
+       if (!empty($vocabulary)) {
+-        $vocab->vid = $vocabulary->vid;
++        $vocab['vid'] = $vocabulary->vid;
+       }
+ 
+-      taxonomy_vocabulary_save($vocab);
++      taxonomy_vocabulary_save((object) $vocab);
+     }
+   }
+ }
